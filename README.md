@@ -2,27 +2,26 @@
 
 Control the Spotify desktop app from a panel in Obsidian on Linux: see what's playing, play/pause, skip, search tracks and replay your recent tracks. It talks to Spotify over MPRIS (D-Bus), so it works with Spotify Free and needs no Spotify account login or API key.
 
-> The interface is in Brazilian Portuguese.
-
 ## Features
 
 - Mini player with the cover, title, artist and play/pause, previous and next.
-- Fullscreen cover: click the cover to open it, left-click to play/pause, right-click or Escape to exit.
+- Fullscreen cover that fills the panel (see [Fullscreen mode](#fullscreen-mode)).
 - Search tracks, or paste a Spotify link (`open.spotify.com/track/…` or `spotify:track:…`) to play it directly.
 - Recent tracks: everything that plays while Obsidian is open (last 50), one click to play again.
-- Four themes (Default, Editorial, Kindle Color, Kindle Mono), plus an optional e-ink dither filter for the cover.
-- Kindle Mono blinks like an e-ink screen refreshing when you enter or leave fullscreen and when you hover the controls. Turn it off with **Efeito piscada** in the settings.
+- Four themes (Default, Editorial, Blurry Color, Kindle Mono), plus an optional e-ink dither filter for the cover.
+- Kindle Mono blinks like an e-ink screen refreshing when you enter or leave fullscreen and when you hover the controls. Turn it off with **Blink effect** in the settings.
 - Commands: open panel, play/pause, next track, previous track. Assign hotkeys in **Settings → Hotkeys**.
 
 ## Requirements
 
-- Linux desktop (the plugin is desktop-only and doesn't work on Windows, macOS or mobile).
+- Linux desktop. The plugin is desktop-only, so it doesn't run on mobile.
+- **Windows and macOS: not tested yet.** They aren't expected to work either, because the plugin controls Spotify through MPRIS (D-Bus), which only exists on Linux.
 - The Spotify desktop app, running. Any install works (deb, Snap or Flatpak).
 - `dbus-send`, which ships with almost every Linux desktop (package `dbus` or `dbus-bin`).
 
 ### Obsidian installed as a Flatpak
 
-A Flatpak Obsidian can't reach Spotify until you allow it. On the first start the plugin shows the command to run; you can also find it under **Settings → Spotify MPRIS → Verificar Spotify**:
+A Flatpak Obsidian can't reach Spotify until you allow it. On the first start the plugin shows the command to run; you can also find it under **Settings → Spotify MPRIS → Check Spotify**:
 
 ```bash
 flatpak override --user --talk-name=org.mpris.MediaPlayer2.spotify md.obsidian.Obsidian
@@ -33,10 +32,33 @@ Then quit Obsidian completely and open it again (reloading isn't enough).
 ## Usage
 
 1. Open Spotify.
-2. Select the music icon in the ribbon, or run **Spotify MPRIS: Abrir painel** from the command palette.
+2. Select the music icon in the ribbon, or run **Spotify MPRIS: Open panel** from the command palette.
 3. Type in the search field and press Enter, or paste a Spotify link.
 
 Search results come from Deezer's public catalog (Spotify's own search API requires a Premium account). Selecting a result opens that search in the Spotify app. Recent tracks and pasted track links play directly. After the chosen track ends, the plugin starts its song radio.
+
+### Fullscreen mode
+
+Fullscreen shows the cover across the whole Spotify panel (not the whole Obsidian window).
+
+**To enter**
+
+- Click the small cover in the mini player at the top of the panel.
+- In a tall panel (for example a whole sidebar) with the Editorial, Blurry Color or Kindle Mono theme, the big cover is already on screen: click it.
+
+**While in fullscreen**
+
+- Left-click anywhere on the cover to play or pause.
+- Hover the cover to show the previous, play/pause and next buttons.
+
+**To leave**
+
+- Right-click anywhere on the cover, or
+- press Escape while the Spotify panel is the active tab.
+
+A left-click never closes fullscreen, so you can play and pause without leaving it by accident. The panel remembers the mode, so it reopens in fullscreen if you left it that way.
+
+Tip: double-click the divider above the panel to fit its height to the cover, or the sidebar's edge to fit its width.
 
 ## Privacy and network use
 
