@@ -1,0 +1,7 @@
+data.json
+node_modules/
+.DS_Store
+*.bak-*
+fonts/
+prototipos/
+CONTEXTO-TEMAS.md
