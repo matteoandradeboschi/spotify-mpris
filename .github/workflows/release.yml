@@ -17,6 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # checkout keeps only the commit, so fetch the annotated tag for its message (--notes-from-tag).
+      - name: Fetch the tag
+        run: git fetch --force origin "refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME"
+
       - name: Check the tag matches manifest.json
         run: |
           version=$(jq -r .version manifest.json)
