@@ -2,13 +2,17 @@
 
 Control the Spotify desktop app from a panel in Obsidian on Linux: see what's playing, play/pause, skip, search tracks and replay your recent tracks. It talks to Spotify over MPRIS (D-Bus), so it works with Spotify Free and needs no Spotify account login or API key.
 
+![The three themes in the right sidebar, in normal mode and fullscreen](./images/right-sidebar.png)
+
+![The three themes in a compact pane in the left sidebar](./images/left-sidebar.png)
+
 ## Features
 
 - Mini player with the cover, title, artist and play/pause, previous and next.
 - Fullscreen cover that fills the panel (see [Fullscreen mode](#fullscreen-mode)).
 - Search tracks, or paste a Spotify link (`open.spotify.com/track/…` or `spotify:track:…`) to play it directly.
 - Recent tracks: everything that plays while Obsidian is open (last 50), one click to play again.
-- Four themes (Default, Editorial, Blurry Color, Kindle Mono), plus an optional e-ink dither filter for the cover.
+- Three themes (Editorial, Blurry Color, Kindle Mono), plus an optional e-ink dither filter for the cover.
 - Kindle Mono blinks like an e-ink screen refreshing when you enter or leave fullscreen and when you hover the controls. Turn it off with **Blink effect** in the settings.
 - Commands: open panel, play/pause, next track, previous track. Assign hotkeys in **Settings → Hotkeys**.
 
