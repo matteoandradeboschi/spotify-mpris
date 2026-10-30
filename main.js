@@ -24,7 +24,6 @@ let viewCount = 0;
 // (labels, album, cover handle) is always built and hidden by default. `tall`: the theme has a layout for
 // tall panes (.is-tall). `fitTitle`: see fitTitle. Their fonts are embedded in styles.css.
 const THEMES = {
-  default: { name: "Default" },
   editorial: {
     name: "Editorial",
     tall: true,
@@ -518,7 +517,7 @@ class SpotifyView extends ItemView {
   }
 
   theme() {
-    return THEMES[this.plugin.data.theme] || THEMES.default;
+    return THEMES[this.plugin.data.theme];
   }
 
   applyTheme() {
@@ -906,9 +905,11 @@ class SpotifyView extends ItemView {
 module.exports = class SpotifyMprisPlugin extends Plugin {
   async onload() {
     this.data = Object.assign(
-      { history: [], fullscreen: false, theme: "default", ditherFilter: false, ditherOutside: false, autoFit: true, blink: true },
+      { history: [], fullscreen: false, theme: "kindle", ditherFilter: false, ditherOutside: false, autoFit: true, blink: true },
       await this.loadData()
     );
+    // A theme that no longer exists (the old "default") falls back to Blurry Color.
+    if (!THEMES[this.data.theme]) this.data.theme = "kindle";
     this.views = new Set();
     this.ditherCache = new Map(); // `${url}@${grid}` → Promise of a blob URL
     // The fit depends on the font's metrics, and a theme's font loads the first time the theme is drawn.
@@ -994,7 +995,7 @@ module.exports = class SpotifyMprisPlugin extends Plugin {
   }
 
   dithered(url, grid) {
-    const filter = (THEMES[this.data.theme] || THEMES.default).filter || "spectra6";
+    const filter = THEMES[this.data.theme].filter || "spectra6";
     if (filter !== this.ditherFilterId) {
       // Another palette (theme switch): the cache is stale. Revoke late, the old images stay on screen until replaced.
       const stale = [...this.ditherCache.values()];
