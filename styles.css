@@ -401,7 +401,7 @@
 }
 
 /* Compact, fullscreen: the cover sits above a text band that is as tall as Kindle Mono's in the three e-ink themes,
-   and none of them shows "Tocando agora" there (the tall layout keeps it). */
+   and none of them shows "Now playing" there (the tall layout keeps it). */
 .spotify-mpris {
   --sm-band: 74px;
 }
@@ -1082,7 +1082,7 @@
   }
 }
 
-/* ---------- Theme: Kindle Cor (paper colours follow the active Obsidian theme, light or dark; the cream text over the blurred cover stays fixed) ---------- */
+/* ---------- Theme: Blurry Color, id kindle (paper colours follow the active Obsidian theme, light or dark; the cream text over the blurred cover stays fixed) ---------- */
 
 .spotify-mpris.theme-kindle {
   --kc-paper: var(--background-secondary);
@@ -1789,7 +1789,7 @@
 }
 
 .spotify-mpris.theme-kindle.is-tall .spotify-mpris-full .spotify-mpris-shade > .spotify-mpris-controls > * {
-  --sm-btn-blur: 6px; /* only Kindle Cor blurs the buttons in */
+  --sm-btn-blur: 6px; /* only Blurry Color blurs the buttons in */
   margin-top: 22px; /* label padding-top is 14px here */
 }
 
@@ -2398,7 +2398,7 @@
   font-size: 11px;
 }
 
-/* Tall recents: grid of covers, each with its title and "há X". Search results stay a list. */
+/* Tall recents: grid of covers, each with its title and "X ago". Search results stay a list. */
 .spotify-mpris.theme-mono.is-tall:not(.is-full) .spotify-mpris-list.is-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));

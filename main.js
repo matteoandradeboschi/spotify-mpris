@@ -24,7 +24,7 @@ let viewCount = 0;
 // (labels, album, cover handle) is always built and hidden by default. `tall`: the theme has a layout for
 // tall panes (.is-tall). `fitTitle`: see fitTitle. Their fonts are embedded in styles.css.
 const THEMES = {
-  default: { name: "Padrão" },
+  default: { name: "Default" },
   editorial: {
     name: "Editorial",
     tall: true,
@@ -34,7 +34,7 @@ const THEMES = {
   },
   // Always light, warm paper. Same tall layout as Editorial (cover on top, fitTitle, hover controls row).
   kindle: {
-    name: "Kindle Cor",
+    name: "Blurry Color",
     tall: true,
     fitTitle: true,
     filter: "kaleido",
@@ -184,17 +184,17 @@ function flatpakCommand() {
 }
 
 async function diagnose() {
-  if (process.platform !== "linux") return { text: "Este plugin só funciona no Linux (usa MPRIS)." };
+  if (process.platform !== "linux") return { text: "This plugin only works on Linux (it uses MPRIS)." };
   const command = flatpakCommand();
   if (command) {
-    return { text: "O Obsidian (Flatpak) não tem permissão para falar com o Spotify. Rode este comando no terminal e depois feche o Obsidian por completo e abra de novo (recarregar não basta):", command };
+    return { text: "Obsidian (Flatpak) isn't allowed to talk to Spotify. Run this command in a terminal, then quit Obsidian completely and open it again (reloading isn't enough):", command };
   }
   try {
     await getProp("PlaybackStatus");
-    return { text: "Tudo certo: o Spotify respondeu." };
+    return { text: "All good: Spotify responded." };
   } catch (err) {
-    if (err.code === "ENOENT") return { text: "O comando dbus-send não foi encontrado. Instale o pacote dbus." };
-    return { text: "A permissão está ok, mas o Spotify não respondeu. Abra o app desktop do Spotify e verifique de novo." };
+    if (err.code === "ENOENT") return { text: "The dbus-send command wasn't found. Install the dbus package." };
+    return { text: "The permission is fine, but Spotify didn't respond. Open the Spotify desktop app and check again." };
   }
 }
 
@@ -203,15 +203,15 @@ function renderDiagnosis(el, { text, command }) {
   el.createEl("p", { text });
   if (!command) return;
   el.createEl("pre").createEl("code", { text: command });
-  el.createEl("button", { text: "Copiar comando" }).addEventListener("click", async () => {
+  el.createEl("button", { text: "Copy command" }).addEventListener("click", async () => {
     await navigator.clipboard.writeText(command);
-    new Notice("Comando copiado.");
+    new Notice("Command copied.");
   });
 }
 
 class SetupModal extends Modal {
   onOpen() {
-    this.titleEl.setText("Spotify MPRIS: falta uma permissão");
+    this.titleEl.setText("Spotify MPRIS: a permission is missing");
     diagnose().then((result) => renderDiagnosis(this.contentEl.createDiv("spotify-mpris-diagnosis"), result));
   }
 
@@ -229,8 +229,8 @@ class SpotifySettingTab extends PluginSettingTab {
       plugin.applySettings();
     };
     new Setting(containerEl)
-      .setName("Tema")
-      .setDesc("Muda o layout e as cores do painel.")
+      .setName("Theme")
+      .setDesc("Changes the layout and colors of the panel.")
       .addDropdown((dropdown) => {
         for (const [id, theme] of Object.entries(THEMES)) dropdown.addOption(id, theme.name);
         dropdown.setValue(plugin.data.theme).onChange((value) => {
@@ -239,8 +239,8 @@ class SpotifySettingTab extends PluginSettingTab {
         });
       });
     new Setting(containerEl)
-      .setName("Efeito piscada")
-      .setDesc("Kindle Mono: piscada de tela e-ink ao entrar e sair da tela cheia e ao passar o mouse sobre os controles.")
+      .setName("Blink effect")
+      .setDesc("Kindle Mono: an e-ink screen refresh blink when entering or leaving fullscreen and when hovering the controls.")
       .addToggle((toggle) =>
         toggle.setValue(plugin.data.blink).onChange((value) => {
           plugin.data.blink = value;
@@ -248,8 +248,8 @@ class SpotifySettingTab extends PluginSettingTab {
         })
       );
     new Setting(containerEl)
-      .setName("Filtro e-ink")
-      .setDesc("Pontilhado de tela e-ink colorida na capa da tela cheia, em qualquer tema. Cada tema tem a sua paleta (Editorial: Spectra 6; Kindle Cor: Kaleido; Kindle Mono: 4 cinzas).")
+      .setName("E-ink filter")
+      .setDesc("Color e-ink screen dithering on the fullscreen cover, in any theme. Each theme has its own palette (Editorial: Spectra 6; Blurry Color: Kaleido; Kindle Mono: 4 grays).")
       .addToggle((toggle) =>
         toggle.setValue(plugin.data.ditherFilter).onChange(async (value) => {
           plugin.data.ditherFilter = value;
@@ -258,8 +258,8 @@ class SpotifySettingTab extends PluginSettingTab {
         })
       );
     new Setting(containerEl)
-      .setName("Também fora da tela cheia")
-      .setDesc("Aplica o filtro também na capa do modo normal e nas capas dos recentes.")
+      .setName("Outside fullscreen too")
+      .setDesc("Also applies the filter to the cover in normal mode and to the recent tracks' covers.")
       .setClass("spotify-mpris-setting-sub")
       .addToggle((toggle) =>
         toggle.setValue(plugin.data.ditherOutside).onChange((value) => {
@@ -269,8 +269,8 @@ class SpotifySettingTab extends PluginSettingTab {
       )
       .setDisabled(!plugin.data.ditherFilter);
     new Setting(containerEl)
-      .setName("Ajustar altura à capa")
-      .setDesc("Ao trocar de música, de tema ou ao arrastar a largura da aba, encaixa sozinho a capa (como o duplo clique na divisória). No layout alto a capa é sempre proporcional, independente disto.")
+      .setName("Fit height to cover")
+      .setDesc("When the track or theme changes, or when you drag the pane's width, fits the cover automatically (like double-clicking the divider). In the tall layout the cover is always proportional, regardless of this.")
       .addToggle((toggle) =>
         toggle.setValue(plugin.data.autoFit).onChange((value) => {
           plugin.data.autoFit = value;
@@ -279,9 +279,9 @@ class SpotifySettingTab extends PluginSettingTab {
       );
     let result;
     new Setting(containerEl)
-      .setName("Verificar Spotify")
-      .setDesc("Use se o plugin parar de funcionar: mostra o que está faltando e o comando para corrigir.")
-      .addButton((btn) => btn.setButtonText("Verificar").onClick(async () => renderDiagnosis(result, await diagnose())));
+      .setName("Check Spotify")
+      .setDesc("Use this if the plugin stops working: shows what's missing and the command to fix it.")
+      .addButton((btn) => btn.setButtonText("Check").onClick(async () => renderDiagnosis(result, await diagnose())));
     result = containerEl.createDiv("spotify-mpris-diagnosis");
   }
 }
@@ -292,12 +292,12 @@ function formatTime(seconds) {
 
 function ago(timestamp) {
   const minutes = Math.floor((Date.now() - timestamp) / 60000);
-  if (minutes < 1) return "agora";
-  if (minutes < 60) return `há ${minutes} min`;
+  if (minutes < 1) return "now";
+  if (minutes < 60) return `${minutes} min ago`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `há ${hours} h`;
+  if (hours < 24) return `${hours} h ago`;
   const days = Math.floor(hours / 24);
-  return days === 1 ? "ontem" : `há ${days} dias`;
+  return days === 1 ? "yesterday" : `${days} days ago`;
 }
 
 class SpotifyView extends ItemView {
@@ -335,8 +335,10 @@ class SpotifyView extends ItemView {
     // Normal mode: mini player, search, then recent tracks or search results.
     const mini = root.createDiv("spotify-mpris-mini");
     this.miniEl = mini;
-    const miniArt = mini.createEl("img", { cls: "spotify-mpris-art", attr: { "aria-label": "Tela cheia" } });
-    miniArt.addEventListener("click", () => this.setFull(true));
+    const miniArt = mini.createEl("img", { cls: "spotify-mpris-art", attr: { "aria-label": "Fullscreen" } });
+    // Opens on press, not on release: the right-click that closes fullscreen fires on press too (Linux), so both
+    // ways start their e-ink refresh at the same moment after the finger moves.
+    miniArt.addEventListener("pointerdown", (event) => event.button === 0 && this.setFull(true));
     // Its src is set by refreshArt (it may be the dithered copy).
     this.miniArt = miniArt;
     const miniInfo = mini.createDiv("spotify-mpris-info");
@@ -347,7 +349,7 @@ class SpotifyView extends ItemView {
     // Always-visible search: a borderless field with a hairline under it, so it reads as part of the list.
     const form = root.createEl("form", { cls: "spotify-mpris-search" });
     setIcon(form.createSpan("spotify-mpris-search-icon"), "search");
-    const input = form.createEl("input", { type: "search", placeholder: "Buscar ou colar link do Spotify" });
+    const input = form.createEl("input", { type: "search", placeholder: "Search or paste a Spotify link" });
     input.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
       input.value = "";
@@ -396,13 +398,19 @@ class SpotifyView extends ItemView {
       else if (event.target === this.leaf.getRoot().resizeHandleEl) this.fitWidth();
     });
     // Left-click anywhere on the cover toggles play/pause (buttons keep their own action).
-    // Themes with a tall layout show the cover in normal mode too: there a click opens fullscreen.
+    // Themes with a tall layout show the cover in normal mode too: there a press opens fullscreen (see miniArt), and
+    // the click its release then fires inside fullscreen must not play/pause.
+    let opened = false;
+    full.addEventListener("pointerdown", (event) => {
+      opened = event.button === 0 && !this.plugin.data.fullscreen && !event.target.closest("button, .spotify-mpris-cover-handle") && !!event.target.closest(".spotify-mpris-stage");
+      if (opened) this.setFull(true);
+    });
     full.addEventListener("click", (event) => {
-      if (event.target.closest("button, .spotify-mpris-cover-handle")) return;
-      if (!this.plugin.data.fullscreen) {
-        if (event.target.closest(".spotify-mpris-stage")) this.setFull(true);
+      if (opened) {
+        opened = false;
         return;
       }
+      if (!this.plugin.data.fullscreen || event.target.closest("button, .spotify-mpris-cover-handle")) return;
       call("PlayPause").catch(() => {}).then(() => this.plugin.poll());
     });
     // Right-click anywhere exits fullscreen, so a stray left-click can't close it.
@@ -497,7 +505,7 @@ class SpotifyView extends ItemView {
     this.plugin.views.delete(this);
   }
 
-  // "Tocando agora" / "Pausado" tag; hidden unless the theme shows it.
+  // "Now playing" / "Paused" tag; hidden unless the theme shows it.
   label(parent, long) {
     this.labelEls.push([parent.createDiv("spotify-mpris-label"), long]);
   }
@@ -600,11 +608,11 @@ class SpotifyView extends ItemView {
 
   controls(parent) {
     const el = parent.createDiv("spotify-mpris-controls");
-    this.button(el, "skip-back", "Anterior", () => call("Previous"));
+    this.button(el, "skip-back", "Previous", () => call("Previous"));
     const play = this.button(el, "play", "Play/Pause", () => call("PlayPause"));
     play.addClass("spotify-mpris-play");
     this.playBtns.push(play);
-    this.button(el, "skip-forward", "Próxima", () => call("Next"));
+    this.button(el, "skip-forward", "Next", () => call("Next"));
   }
 
   button(parent, icon, label, action) {
@@ -785,7 +793,7 @@ class SpotifyView extends ItemView {
   }
 
   update(state) {
-    const offline = this.plugin.missingPermission ? "Sem permissão: veja Configurações → Verificar Spotify" : "Spotify não está aberto";
+    const offline = this.plugin.missingPermission ? "No permission: see Settings → Check Spotify" : "Spotify isn't open";
     const text = state ? `${state.title}\n${state.artist}` : offline;
     const title = state ? state.title || "—" : offline;
     this.titleEls.forEach((el, i) => el.setText(i === this.titleEls.length - 1 ? hyphenate(title) : title));
@@ -796,7 +804,7 @@ class SpotifyView extends ItemView {
     }
     this.albumEls.forEach((el) => el.setText(state ? state.album : ""));
     const playing = !!(state && state.playing);
-    this.labelEls.forEach(([el, long]) => el.setText(playing ? (long ? "Tocando agora" : "Agora") : "Pausado"));
+    this.labelEls.forEach(([el, long]) => el.setText(playing ? (long ? "Now playing" : "Now") : "Paused"));
     for (const img of this.artEls) {
       if (state && state.art) {
         if (img.getAttr("src") !== state.art) img.setAttr("src", state.art);
@@ -813,7 +821,7 @@ class SpotifyView extends ItemView {
     }
     this.playBtns.forEach((btn) => setIcon(btn, playing ? "pause" : "play"));
 
-    // Re-render recents when the track changes, and once a minute for the "há X min" labels.
+    // Re-render recents when the track changes, and once a minute for the "X min ago" labels.
     const history = this.plugin.data.history;
     const key = `${history[0] && history[0].id}-${Math.floor(Date.now() / 60000)}`;
     if (this.showingRecents && key !== this.recentsKey) this.showRecents();
@@ -846,14 +854,14 @@ class SpotifyView extends ItemView {
     this.recentsKey = `${history[0] && history[0].id}-${Math.floor(Date.now() / 60000)}`;
     this.listEl.empty();
     this.listEl.addClass("is-grid"); // Themes may lay the recents out as a grid of covers.
-    this.listLabelEl.setText("Recentes");
+    this.listLabelEl.setText("Recent");
     if (!history.length) {
-      this.listEl.createDiv({ cls: "spotify-mpris-empty", text: "As músicas que tocarem com o Obsidian aberto aparecem aqui." });
+      this.listEl.createDiv({ cls: "spotify-mpris-empty", text: "Tracks that play while Obsidian is open show up here." });
       return;
     }
     // MPRIS gives the exact Spotify track ID, so recent tracks play directly (then their song radio, see playTrack).
     for (const track of history) {
-      this.row(track.art, track.title, track.artist, ago(track.at), "Tocar", () => this.plugin.playTrack(track.id), true);
+      this.row(track.art, track.title, track.artist, ago(track.at), "Play", () => this.plugin.playTrack(track.id), true);
     }
   }
 
@@ -862,7 +870,7 @@ class SpotifyView extends ItemView {
     this.showingRecents = false;
     this.listEl.empty();
     this.listEl.removeClass("is-grid");
-    this.listLabelEl.setText("Resultados");
+    this.listLabelEl.setText("Results");
 
     // A pasted Spotify link has an exact ID, so it can be played directly (tracks then their song radio, see playTrack).
     const link = query.match(SPOTIFY_LINK);
@@ -878,17 +886,17 @@ class SpotifyView extends ItemView {
       const res = await requestUrl(`https://api.deezer.com/search?limit=25&q=${encodeURIComponent(query)}`);
       tracks = res.json.data || [];
     } catch {
-      this.listEl.createDiv({ cls: "spotify-mpris-empty", text: "Erro na busca." });
+      this.listEl.createDiv({ cls: "spotify-mpris-empty", text: "Search failed." });
       return;
     }
     if (!tracks.length) {
-      this.listEl.createDiv({ cls: "spotify-mpris-empty", text: "Nada encontrado." });
+      this.listEl.createDiv({ cls: "spotify-mpris-empty", text: "Nothing found." });
       return;
     }
 
     for (const track of tracks) {
       // Without the Web API there is no Spotify track ID, so this opens the search in the app.
-      this.row(track.album.cover_small, track.title, `${track.artist.name} · ${formatTime(track.duration)}`, "", "Abrir no Spotify", () =>
+      this.row(track.album.cover_small, track.title, `${track.artist.name} · ${formatTime(track.duration)}`, "", "Open in Spotify", () =>
         call("OpenUri", `string:spotify:search:${encodeURIComponent(`${track.artist.name} ${track.title}`)}`)
       );
     }
@@ -909,11 +917,11 @@ module.exports = class SpotifyMprisPlugin extends Plugin {
     this.missingPermission = !!flatpakCommand();
 
     this.registerView(VIEW_TYPE, (leaf) => new SpotifyView(leaf, this));
-    this.addRibbonIcon("music", "Abrir Spotify", () => this.openView());
-    this.addCommand({ id: "open", name: "Abrir painel", callback: () => this.openView() });
+    this.addRibbonIcon("music", "Open Spotify", () => this.openView());
+    this.addCommand({ id: "open", name: "Open panel", callback: () => this.openView() });
     this.addCommand({ id: "play-pause", name: "Play/pause", callback: () => call("PlayPause").catch(() => {}) });
-    this.addCommand({ id: "next", name: "Próxima faixa", callback: () => call("Next").catch(() => {}) });
-    this.addCommand({ id: "previous", name: "Faixa anterior", callback: () => call("Previous").catch(() => {}) });
+    this.addCommand({ id: "next", name: "Next track", callback: () => call("Next").catch(() => {}) });
+    this.addCommand({ id: "previous", name: "Previous track", callback: () => call("Previous").catch(() => {}) });
     this.addSettingTab(new SpotifySettingTab(this.app, this));
 
     // Offered once per machine; afterwards the "Verificar Spotify" setting covers it.

@@ -1,7 +1,7 @@
 {
   "id": "spotify-mpris",
   "name": "Spotify MPRIS",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "minAppVersion": "1.0.0",
   "description": "Search tracks and control the Spotify desktop app (Linux, MPRIS). Works with Spotify Free.",
   "author": "Matteo",
