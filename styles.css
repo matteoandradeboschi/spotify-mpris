@@ -1048,21 +1048,25 @@
 
 .spotify-mpris-glass > :nth-child(1) {
   backdrop-filter: blur(1px);
+  -webkit-mask-image: linear-gradient(transparent 0%, #000 25%, #000 50%, transparent 62%);
   mask-image: linear-gradient(transparent 0%, #000 25%, #000 50%, transparent 62%);
 }
 
 .spotify-mpris-glass > :nth-child(2) {
   backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(transparent 25%, #000 50%, #000 70%, transparent 82%);
   mask-image: linear-gradient(transparent 25%, #000 50%, #000 70%, transparent 82%);
 }
 
 .spotify-mpris-glass > :nth-child(3) {
   backdrop-filter: blur(7px) saturate(1.2);
+  -webkit-mask-image: linear-gradient(transparent 50%, #000 72%, #000 88%, transparent 100%);
   mask-image: linear-gradient(transparent 50%, #000 72%, #000 88%, transparent 100%);
 }
 
 .spotify-mpris-glass > :nth-child(4) {
   backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-mask-image: linear-gradient(transparent 70%, #000 92%);
   mask-image: linear-gradient(transparent 70%, #000 92%);
 }
 
@@ -1313,6 +1317,7 @@
 
 .spotify-mpris.theme-kindle:not(.is-tall) .spotify-mpris-full-art {
   object-position: center top;
+  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent); /* the cover fades into its blurred copy, as in the tall layout */
   mask-image: linear-gradient(to bottom, #000 82%, transparent); /* the cover fades into its blurred copy, as in the tall layout */
 }
 
@@ -1510,6 +1515,7 @@
 }
 
 .spotify-mpris.theme-kindle.is-tall.is-full .spotify-mpris-full-art {
+  -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent);
   mask-image: linear-gradient(to bottom, #000 82%, transparent);
 }
 
