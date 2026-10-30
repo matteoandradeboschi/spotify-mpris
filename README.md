@@ -14,7 +14,8 @@ Control the Spotify desktop app from a panel in Obsidian on Linux: see what's pl
 
 ## Requirements
 
-- Linux desktop (the plugin is desktop-only and doesn't work on Windows, macOS or mobile).
+- Linux desktop. The plugin is desktop-only, so it doesn't run on mobile.
+- **Windows and macOS: not tested yet.** They aren't expected to work either, because the plugin controls Spotify through MPRIS (D-Bus), which only exists on Linux.
 - The Spotify desktop app, running. Any install works (deb, Snap or Flatpak).
 - `dbus-send`, which ships with almost every Linux desktop (package `dbus` or `dbus-bin`).
 
